@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Tính tuổi hiện tại</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(120deg, #74ebd5, #9face6);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        footer {
+            background: #212529;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <span class="navbar-brand">🎓 Website Tính Tuổi</span>
+    </div>
+</nav>
+
+<!-- MAIN -->
+<div class="container d-flex justify-content-center align-items-center flex-grow-1">
+    <div class="card shadow p-4" style="max-width: 420px; width: 100%;">
+        <h3 class="text-center mb-3">🎂 Tính tuổi hiện tại</h3>
+
+        <div class="mb-3">
+            <label class="form-label">Nhập năm sinh</label>
+            <input
+                type="text"
+                id="birthYear"
+                class="form-control"
+                placeholder="1950 - năm hiện tại"
+            >
+            <div id="errorMsg" class="text-danger mt-1"></div>
+        </div>
+
+        <button class="btn btn-primary w-100" onclick="calculateAge()">
+            Tính tuổi
+        </button>
+
+        <div id="result" class="alert alert-success mt-3 text-center d-none"></div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="text-center py-3">
+    © 2025 - Ứng dụng tính tuổi
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+    function calculateAge() {
+        const input = document.getElementById("birthYear").value.trim();
+        const errorMsg = document.getElementById("errorMsg");
+        const result = document.getElementById("result");
+
+        const currentYear = new Date().getFullYear();
+
+        errorMsg.textContent = "";
+        result.classList.add("d-none");
+
+        // Kiểm tra rỗng
+        if (input === "") {
+            errorMsg.textContent = "Vui lòng nhập năm sinh";
+            return;
+        }
+
+        // Kiểm tra ký tự
+        if (!/^[0-9]+$/.test(input)) {
+            errorMsg.textContent = "Năm sinh phải là số";
+            return;
+        }
+
+        const year = parseInt(input);
+
+        // Kiểm tra khoảng
+        if (year < 1950 || year > currentYear) {
+            errorMsg.textContent = `Năm sinh phải từ 1950 đến ${currentYear}`;
+            return;
+        }
+
+        const age = currentYear - year;
+        result.textContent = `Tuổi hiện tại của bạn là ${age}`;
+        result.classList.remove("d-none");
+    }
+</script>
+
+</body>
+</html>
