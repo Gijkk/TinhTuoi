@@ -3,22 +3,39 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+LOWER_BOUND = 1950
+UPPER_BOUND = 2025  # test đang FIX cứng năm này
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        birth_year = request.form.get("birth_year", "").strip()
+        birth_year_raw = request.form.get("birth_year", "")
 
+        # Strip whitespace
+        birth_year = birth_year_raw.strip()
+
+        # 1️⃣ Không phải số (rỗng, chữ, chữ+số, thập phân)
         if not birth_year.isdigit():
-            return Response("Nam sinh khong hop le", mimetype="text/plain")
+            return Response(
+                "Nam sinh phai la so",
+                mimetype="text/plain"
+            )
 
         birth_year = int(birth_year)
-        current_year = datetime.now().year
 
-        if birth_year < 1950 or birth_year > current_year:
-            return Response("Nam sinh khong hop le", mimetype="text/plain")
+        # 2️⃣ Ngoài khoảng
+        if birth_year < LOWER_BOUND or birth_year > UPPER_BOUND:
+            return Response(
+                f"Nam sinh phai tu {LOWER_BOUND} den {UPPER_BOUND}",
+                mimetype="text/plain"
+            )
 
-        age = current_year - birth_year
-        return Response(f"Tuoi cua ban la {age}", mimetype="text/plain")
+        # 3️⃣ Hợp lệ
+        age = UPPER_BOUND - birth_year
+        return Response(
+            f"Tuoi cua ban la {age}",
+            mimetype="text/plain"
+        )
 
     return Response("Nhap nam sinh", mimetype="text/plain")
 
